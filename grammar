@@ -1,8 +1,335 @@
 # C language grammar specification
 # Source: http://www.lysator.liu.se/c/ANSI-C-grammar-y.html
 
-primary_expression
+primary_exp
 	id
 	constant
 	string
-	lparen expression rparen
+	lparen exp rparen
+
+postfix_exp
+	primary_exp
+	postfix_exp lsb exp rsb
+	postfix_exp lparen rparen
+	postfix_exp lparen arg_exp_list rparen
+	postfix_exp dot id
+	postfix_exp point id
+	postfix_exp inc
+	postfix_exp dec
+
+arg_exp_list
+	assign_exp
+	arg_exp_list comma assign_exp
+
+unary_exp
+	postfix_exp
+	inc unary_exp
+	dec unary_exp
+	unary_op cast_exp
+	sizeof unary_exp
+	sizeof lparen type_name rparen
+
+unary_op
+	ampersand
+	star
+	plus
+	minus
+	tilde
+	not
+
+cast_exp
+	unary_exp
+	lparen type_name rparen cast_exp
+
+mul_exp
+	cast_exp
+	mul_exp star cast_exp
+	mul_exp div cast_exp
+	mul_exp mod cast_exp
+
+add_exp
+	mul_exp
+	add_exp plus mul_exp
+	add_exp minus mul_exp
+
+shift_exp
+	add_exp
+	shift_exp left add_exp
+	shift_exp right add_exp
+
+relation_exp
+	shift_exp
+	relation_exp lt shift_exp
+	relation_exp gt shift_exp
+	relation_exp le shift_exp
+	relation_exp ge shift_exp
+
+equal_exp
+	relation_exp
+	equal_exp eq relation_exp
+	equal_exp ne relation_exp
+
+band_exp
+	equal_exp
+	band_exp ampersand equal_exp
+
+xor_exp
+	band_exp
+	xor_exp xor band_exp
+
+bor_exp
+	xor_exp
+	bor_exp bor xor_exp
+
+and_exp
+	bor_exp
+	and_exp and bor_exp
+
+or_exp
+	and_exp
+	or_exp or and_exp
+
+cond_exp
+	or_exp
+	or_exp question exp colon cond_exp
+
+assign_exp
+	cond_exp
+	unary_exp assign_op assign_exp
+
+assign_op
+	assign
+	right_assign
+	left_assign
+	add_assign
+	sub_assign
+	mul_assign
+	div_assign
+	mod_assign
+	and_assign
+	xor_assign
+	or_assign
+
+exp
+	assign_exp
+	exp comma assign_exp
+
+constant_exp
+	cond_exp
+
+declaration
+	declaration_specs semicolon
+	declaration_specs init_decl_list semicolon
+
+declaration_specs
+	storage_class_spec
+	storage_class_spec declaration_specs
+	type_spec
+	type_spec declaration_specs
+	type_qualifier
+	type_qualifier declaration_specs
+
+init_decl_list
+	declarator
+	declarator assign initializer
+
+storage_class_spec
+	typedef
+	extern
+	static
+	auto
+	register
+
+type_spec
+	void
+	char
+	short
+	int
+	long
+	float
+	double
+	signed
+	unsigned
+	struct_or_union_spec
+	enum_spec
+#	type_name
+
+struct_or_union_spec
+	struct_or_union id lcb struct_decl_list rcb
+	struct_or_union lcb struct_decl_list rcb
+	struct_or_union id
+
+struct_or_union
+	struct
+	union
+
+struct_decl_list
+	struct_declaration
+	struct_decl_list struct_declaration
+
+struct_declaration
+	specifier_qualifier_list struct_decl_list semicolon
+
+specifier_qualifier_list
+	type_spec specifier_qualifier_list
+	type_spec
+	type_qualifier specifier_qualifier_list
+	type_qualifier
+
+struct_decl_list
+	struct_decl
+	struct_decl_list comma struct_decl
+
+struct_decl
+	declarator
+	colon constant_exp
+	declarator colon constant_exp
+
+enum_spec
+	enum lcb enum_list rcb
+	enum id lcb enum_list rcb
+	enum id
+
+enum_list
+	enumerator
+	enum_list comma enumerator
+
+enumerator
+	id
+	id assign constant_exp
+
+type_qualifier
+	const
+	volatile
+
+declarator
+	pointer direct_declarator
+	direct_declarator
+
+direct_declarator
+	id
+	lparen declarator rparen
+	direct_declarator lsb constant_exp rsb
+	direct_declarator lsb rsb
+	direct_declarator lparen param_type_list rparen
+	direct_declarator lparen id_list rparen
+	direct_declarator lparen rparen
+
+pointer
+	star
+	star type_qualifier_list
+	star pointer
+	star type_qualifier_list pointer
+
+type_qualifier_list
+	type_qualifier
+	type_qualifier_list type_qualifier
+
+param_type_list
+	param_list
+	param_list comma ellipsis
+
+param_list
+	param_declaration
+	param_list comma param_declaration
+
+param_declaration
+	declaration_specs declarator
+	declaration_specs abstract_declarator
+	declaration_specs
+
+id_list
+	id
+	id_list comma id
+
+type_name
+	specifier_qualifier_listl
+	specifier_qualifier_listl abstract_declarator
+
+abstract_declarator
+	pointer
+	direct_abstract_declarator
+	pointer direct_abstract_declarator
+
+direct_abstract_declarator
+	lparen abstract_declarator rparen
+	lsb rsb
+	lsb constant_exp rsb
+	direct_abstract_declarator lsb rsb
+	direct_abstract_declarator lsb constant_exp rsb
+	lparen rparen
+	lparen param_type_list rparen
+	direct_abstract_declarator lparen rparen
+	direct_abstract_declarator lparen param_list rparen
+
+initializer
+	assign_exp
+	lcb initializer_list rcb
+	lcb initializer_list comma rcb
+
+initializer_list
+	initializer
+	initializer_list comma initializer
+
+statement
+	label_statment
+	compound_statement
+	exp_statement
+	select_statement
+	iter_statement
+	jump_statement
+
+label_statment
+	id colon statement
+	case constant_exp colon statement
+	default colon statement
+
+compound_statement
+	lcb rcb
+	lcb statement_list rcb
+	lcb declaration_list rcb
+	lcb declaration_list statement_list rcb
+
+declaration_list
+	declaration
+	declaration_list declaration
+
+statement_list
+	statement
+	statement_list statement
+
+exp_statement
+	semicolon
+	exp semicolon
+
+select_statement
+	if lparen exp rparen statement
+	if lparen exp rparen statement else statement
+	switch lparen exp rparen statement
+
+iter_statement
+	while lparen exp rparen statement
+	do statement while lparen exp rparen semicolon
+	for lparen exp_statement exp_statement rparen statement
+	for lparen exp_statement exp_statement exp rparen statement
+
+jump_statement
+	goto id semicolon
+	continue semicolon
+	break semicolon
+	return semicolon
+	return exp semicolon
+
+translation_unit
+	external_declaration
+	translation_unit external_declaration
+
+external_declaration
+	function_declaration
+	declaration
+
+function_declaration
+	declaration_specs declarator declaration_list compound_statement
+	declaration_specs declarator compound_statement
+	declarator declaration_list compound_statement
+	declarator compound_statement

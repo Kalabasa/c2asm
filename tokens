@@ -19,6 +19,8 @@ return	\breturn\b
 switch	\bswitch\b
 while	\bwhile\b
 
+sizeof	\bsizeof\b
+
 # Types
 char	\bchar\b
 double	\bdouble\b
@@ -44,8 +46,6 @@ register	\bregister\b
 static	\bstatic\b
 typedef	\btypedef\b
 
-sizeof	\bsizeof\b
-
 # Identifier
 id	[a-zA-Z_]\w*
 
@@ -53,7 +53,7 @@ id	[a-zA-Z_]\w*
 constant	0[xX][a-fA-F0-9]+(u|U|l|L)*?
 constant	0\d+(u|U|l|L)*?
 constant	\d+(u|U|l|L)*?
-constant	L?'(\\.|[^\\'])+'
+constant	L?'(\\.|[^\\'])'
 
 constant	\d+[Ee][+-]?\d+(u|U|l|L)*?
 constant	\d*\.\d+([Ee][+-]?\d+)?(f|F|l|L)?
@@ -99,14 +99,14 @@ ampersand	&
 bang	!
 tilde	~
 minus	-
-add	\+
+plus	\+
 star	\*
 div	/
 mod	%
 gt	>
 lt	<
-caret	\^
-pipe	\|
+xor	\^
+bor	\|
 question	\?
 
 space	\s+	ignore

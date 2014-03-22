@@ -10,16 +10,15 @@ class Parser{
 		this.grammar = grammar;
 	}
 
-
 	public function parse(tokens:List<Token>):Node{
 		var subtree:Node = null;
+		var p:Node = null;
 		for(t in tokens){
 			var node:Node = new Node(t);
 			if(subtree == null){
-				subtree = node;
-			}else{
-				subtree.sibling = node;
+				p = subtree = node;
 			}
+			p = p.sibling = node;
 		}
 		return subtree;
 	}

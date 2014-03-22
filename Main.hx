@@ -2,6 +2,7 @@ import c2asm.lexer.Lexer;
 import c2asm.lexer.LexiGrammar;
 import c2asm.lexer.LexiRule;
 import c2asm.lexer.Token;
+import c2asm.parser.Node;
 import c2asm.parser.ParseGrammar;
 import c2asm.parser.Parser;
 import c2asm.parser.ParseRule;
@@ -27,7 +28,9 @@ class Main{
 		var l:Lexer = new Lexer(lg);
 		var tokens:List<Token> = l.tokenize(str);
 		if(tokens != null){
-			trace('Tokens:');
+			trace('');
+			trace('Tokens-------------------------------------');
+			trace('');
 			for(t in tokens){
 				trace(t.type + ' ' + t.data);
 			}
@@ -35,9 +38,23 @@ class Main{
 
 		// Load grammatical rules
 		var pg:ParseGrammar = loadParseGrammar('grammar');
+		trace('');
+		trace('Rules-----------------------------------------');
+		trace('');
+		for(r in pg.rules){
+			trace(r.pre);
+			for(post in r.post){
+				trace('\t' + post);
+			}
+		}
 
 		// Parse
 		var p:Parser = new Parser(pg);
+		var root:Node = p.parse(tokens);
+		while(root != null){
+			trace(root.data.type + ' ' + root.data.data);
+			root = root.sibling;
+		}
 	}
 
 	public static function loadLexiGrammar(filename:String):LexiGrammar{
@@ -75,23 +92,17 @@ class Main{
 				}
 				var s:Array<String> = ws.split(line);
 				if(s[0].length > 0){
-					if(currentPre != null){
-						pg.rules.add(new ParseRule(currentPre, currentPost));
-					}
 					currentPre = s[0];
-					currentPost = new List<String>();
 				}else{
+					currentPost = new List<String>();
 					for(i in 1...s.length){
 						currentPost.add(s[i]);
 					}
+					pg.rules.add(new ParseRule(currentPre, currentPost));
 				}
 			}
 		}catch(e:Dynamic){}
 		fin.close();
-		
-		if(currentPre != null){
-			pg.rules.add(new ParseRule(currentPre, currentPost));
-		}
 
 		return pg;
 	}
