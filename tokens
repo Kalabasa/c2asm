@@ -1,0 +1,112 @@
+# C language tokens specification
+# Source: http://www.lysator.liu.se/c/ANSI-C-grammar-l.html
+
+# Comments
+comment	//.*	ignore
+comment	/\*(.|[\n\r])*\*/	ignore
+
+# Reserved words
+break	\bbreak\b
+case	\bcase\b
+continue	\bcontinue\b
+default	\bdefault\b
+do	\bdo\b
+else	\belse\b
+for	\bfor\b
+goto	\bgoto\b
+if	\bif\b
+return	\breturn\b
+switch	\bswitch\b
+while	\bwhile\b
+
+# Types
+char	\bchar\b
+double	\bdouble\b
+float	\bfloat\b
+int	\bint\b
+long	\blong\b
+short	\bshort\b
+void	\bvoid\b
+
+const	\bconst\b
+enum	\benum\b
+signed	\bsigned\b
+unsigned	\bunsigned\b
+volatile	\bvolatile\b
+
+struct	\bstruct\b
+union	\bunion\b
+
+# Type modifiers
+auto	\bauto\b
+extern	\bextern\b
+register	\bregister\b
+static	\bstatic\b
+typedef	\btypedef\b
+
+sizeof	\bsizeof\b
+
+# Identifier
+id	[a-zA-Z_]\w*
+
+# Literals
+constant	0[xX][a-fA-F0-9]+(u|U|l|L)*?
+constant	0\d+(u|U|l|L)*?
+constant	\d+(u|U|l|L)*?
+constant	L?'(\\.|[^\\'])+'
+
+constant	\d+[Ee][+-]?\d+(u|U|l|L)*?
+constant	\d*\.\d+([Ee][+-]?\d+)?(f|F|l|L)?
+constant	\d+\.\d*([Ee][+-]?\d+)?(f|F|l|L)?
+
+string	L?"(\\.|[^\\"])*"
+
+# Symbols
+ellipsis	\.\.\.
+right_assign	>>=
+left_assign	<<=
+add_assign	\+=
+sub_assign	-=
+mul_assign	\*=
+div_assign	/=
+mod_assign	%=
+and_assign	&=
+xor_assign	\^=
+or_assign	\|=
+right	>>
+left	<<
+inc	\+\+
+dec	--
+point	->
+and	&&
+or	\|\|
+le	<=
+ge	>=
+eq	==
+ne	!=
+semicolon	;
+lcb	{|<%
+rcb	}|%>
+comma	,
+colon	:
+assign	=
+lparen	\(
+rparen	\)
+lsb	\[|<:
+rsb	\]|:>
+dot	\.
+ampersand	&
+bang	!
+tilde	~
+minus	-
+add	\+
+star	\*
+div	/
+mod	%
+gt	>
+lt	<
+caret	\^
+pipe	\|
+question	\?
+
+space	\s+	ignore

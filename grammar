@@ -1,0 +1,8 @@
+# C language grammar specification
+# Source: http://www.lysator.liu.se/c/ANSI-C-grammar-y.html
+
+primary_expression
+	id
+	constant
+	string
+	lparen expression rparen
