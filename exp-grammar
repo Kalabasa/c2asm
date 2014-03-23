@@ -1,0 +1,9 @@
+start exp
+
+exp
+	exp plus	term
+	term
+
+term
+	lparen exp rparen
+	id

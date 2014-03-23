@@ -1,0 +1,337 @@
+# C language grammar specification
+# Source: http://www.lysator.liu.se/c/ANSI-C-grammar-y.html
+
+start translation-unit
+
+primary-exp
+	id
+	constant
+	string
+	lparen exp rparen
+
+postfix-exp
+	primary-exp
+	postfix-exp lsb exp rsb
+	postfix-exp lparen rparen
+	postfix-exp lparen arg-exp-list rparen
+	postfix-exp dot id
+	postfix-exp point id
+	postfix-exp inc
+	postfix-exp dec
+
+arg-exp-list
+	assign-exp
+	arg-exp-list comma assign-exp
+
+unary-exp
+	postfix-exp
+	inc unary-exp
+	dec unary-exp
+	unary-op cast-exp
+	sizeof unary-exp
+	sizeof lparen type-name rparen
+
+unary-op
+	ampersand
+	star
+	plus
+	minus
+	tilde
+	not
+
+cast-exp
+	unary-exp
+	lparen type-name rparen cast-exp
+
+mul-exp
+	cast-exp
+	mul-exp star cast-exp
+	mul-exp div cast-exp
+	mul-exp mod cast-exp
+
+add-exp
+	mul-exp
+	add-exp plus mul-exp
+	add-exp minus mul-exp
+
+shift-exp
+	add-exp
+	shift-exp left add-exp
+	shift-exp right add-exp
+
+relation-exp
+	shift-exp
+	relation-exp lt shift-exp
+	relation-exp gt shift-exp
+	relation-exp le shift-exp
+	relation-exp ge shift-exp
+
+equal-exp
+	relation-exp
+	equal-exp eq relation-exp
+	equal-exp ne relation-exp
+
+band-exp
+	equal-exp
+	band-exp ampersand equal-exp
+
+xor-exp
+	band-exp
+	xor-exp xor band-exp
+
+bor-exp
+	xor-exp
+	bor-exp bor xor-exp
+
+and-exp
+	bor-exp
+	and-exp and bor-exp
+
+or-exp
+	and-exp
+	or-exp or and-exp
+
+cond-exp
+	or-exp
+	or-exp question exp colon cond-exp
+
+assign-exp
+	cond-exp
+	unary-exp assign-op assign-exp
+
+assign-op
+	assign
+	right-assign
+	left-assign
+	add-assign
+	sub-assign
+	mul-assign
+	div-assign
+	mod-assign
+	and-assign
+	xor-assign
+	or-assign
+
+exp
+	assign-exp
+	exp comma assign-exp
+
+constant-exp
+	cond-exp
+
+declaration
+	declaration-specs semicolon
+	declaration-specs init-decl-list semicolon
+
+declaration-specs
+	storage-class-spec
+	storage-class-spec declaration-specs
+	type-spec
+	type-spec declaration-specs
+	type-qualifier
+	type-qualifier declaration-specs
+
+init-decl-list
+	declarator
+	declarator assign initializer
+
+storage-class-spec
+	typedef
+	extern
+	static
+	auto
+	register
+
+type-spec
+	void
+	char
+	short
+	int
+	long
+	float
+	double
+	signed
+	unsigned
+	struct-or-union-spec
+	enum-spec
+#	type-name
+
+struct-or-union-spec
+	struct-or-union id lcb struct-decl-list rcb
+	struct-or-union lcb struct-decl-list rcb
+	struct-or-union id
+
+struct-or-union
+	struct
+	union
+
+struct-decl-list
+	struct-declaration
+	struct-decl-list struct-declaration
+
+struct-declaration
+	specifier-qualifier-list struct-decl-list semicolon
+
+specifier-qualifier-list
+	type-spec specifier-qualifier-list
+	type-spec
+	type-qualifier specifier-qualifier-list
+	type-qualifier
+
+struct-decl-list
+	struct-decl
+	struct-decl-list comma struct-decl
+
+struct-decl
+	declarator
+	colon constant-exp
+	declarator colon constant-exp
+
+enum-spec
+	enum lcb enum-list rcb
+	enum id lcb enum-list rcb
+	enum id
+
+enum-list
+	enumerator
+	enum-list comma enumerator
+
+enumerator
+	id
+	id assign constant-exp
+
+type-qualifier
+	const
+	volatile
+
+declarator
+	pointer direct-declarator
+	direct-declarator
+
+direct-declarator
+	id
+	lparen declarator rparen
+	direct-declarator lsb constant-exp rsb
+	direct-declarator lsb rsb
+	direct-declarator lparen param-type-list rparen
+	direct-declarator lparen id-list rparen
+	direct-declarator lparen rparen
+
+pointer
+	star
+	star type-qualifier-list
+	star pointer
+	star type-qualifier-list pointer
+
+type-qualifier-list
+	type-qualifier
+	type-qualifier-list type-qualifier
+
+param-type-list
+	param-list
+	param-list comma ellipsis
+
+param-list
+	param-declaration
+	param-list comma param-declaration
+
+param-declaration
+	declaration-specs declarator
+	declaration-specs abstract-declarator
+	declaration-specs
+
+id-list
+	id
+	id-list comma id
+
+type-name
+	specifier-qualifier-list
+	specifier-qualifier-list abstract-declarator
+
+abstract-declarator
+	pointer
+	direct-abstract-declarator
+	pointer direct-abstract-declarator
+
+direct-abstract-declarator
+	lparen abstract-declarator rparen
+	lsb rsb
+	lsb constant-exp rsb
+	direct-abstract-declarator lsb rsb
+	direct-abstract-declarator lsb constant-exp rsb
+	lparen rparen
+	lparen param-type-list rparen
+	direct-abstract-declarator lparen rparen
+	direct-abstract-declarator lparen param-list rparen
+
+initializer
+	assign-exp
+	lcb initializer-list rcb
+	lcb initializer-list comma rcb
+
+initializer-list
+	initializer
+	initializer-list comma initializer
+
+statement
+	label-statment
+	compound-statement
+	exp-statement
+	select-statement
+	iter-statement
+	jump-statement
+
+label-statment
+	id colon statement
+	case constant-exp colon statement
+	default colon statement
+
+compound-statement
+	lcb rcb
+	lcb statement-list rcb
+	lcb declaration-list rcb
+	lcb declaration-list statement-list rcb
+
+declaration-list
+	declaration
+	declaration-list declaration
+
+statement-list
+	statement
+	statement-list statement
+
+exp-statement
+	semicolon
+	exp semicolon
+
+select-statement
+	if lparen exp rparen statement
+	if lparen exp rparen statement else statement
+	switch lparen exp rparen statement
+
+iter-statement
+	while lparen exp rparen statement
+	do statement while lparen exp rparen semicolon
+	for lparen exp-statement exp-statement rparen statement
+	for lparen exp-statement exp-statement exp rparen statement
+
+jump-statement
+	goto id semicolon
+	continue semicolon
+	break semicolon
+	return semicolon
+	return exp semicolon
+
+translation-unit
+	external-declaration
+	translation-unit external-declaration
+
+external-declaration
+	function-declaration
+	declaration
+
+function-declaration
+	declaration-specs declarator declaration-list compound-statement
+	declaration-specs declarator compound-statement
+	declarator declaration-list compound-statement
+	declarator compound-statement

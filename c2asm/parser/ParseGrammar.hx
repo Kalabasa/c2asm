@@ -7,11 +7,9 @@ import c2asm.parser.Terminal;
 class ParseGrammar{
 	public var rules:List<ParseRule>;
 	public var start:Nonterminal = null;
-	public var trie:TrieNode<ParseRule>;
 
 	public function new(){
 		rules = new List<ParseRule>();
-		trie = new TrieNode<ParseRule>();
 	}
 
 	public function addRuleStr(pre:String, post:Array<String>):Void{
@@ -36,14 +34,6 @@ class ParseGrammar{
 
 		var rule:ParseRule = new ParseRule(preUnit, postUnits);
 		rules.add(rule);
-
-		var p:TrieNode<ParseRule> = trie;
-		trace(rule.toString());
-		for(i in 0...post.length-1){
-			var s:String = post[i];
-			p = p.get(s) == null ? p.set(s) : p.get(s);
-		}
-		p.set(post[post.length-1], rule);
 	}
 
 	public function setStartStr(start:String):Void{

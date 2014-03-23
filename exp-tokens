@@ -1,0 +1,5 @@
+id	[0-9]+
+plus	\+
+lparen	\(
+rparen	\)
+space	\s+	ignore

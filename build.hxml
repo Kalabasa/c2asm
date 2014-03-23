@@ -1,3 +1,4 @@
+-lib polygonal-ds
 -cp c2asm
 -main Main
 -neko c2asm.n

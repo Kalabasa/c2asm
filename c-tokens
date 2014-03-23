@@ -3,7 +3,7 @@
 
 # Comments
 comment	//.*	ignore
-comment	/\*(.|[\n\r])*\*/	ignore
+comment	/\*(.|[\n\r])*?\*/	ignore
 
 # Reserved words
 break	\bbreak\b
@@ -63,16 +63,16 @@ string	L?"(\\.|[^\\"])*"
 
 # Symbols
 ellipsis	\.\.\.
-right_assign	>>=
-left_assign	<<=
-add_assign	\+=
-sub_assign	-=
-mul_assign	\*=
-div_assign	/=
-mod_assign	%=
-and_assign	&=
-xor_assign	\^=
-or_assign	\|=
+right-assign	>>=
+left-assign	<<=
+add-assign	\+=
+sub-assign	-=
+mul-assign	\*=
+div-assign	/=
+mod-assign	%=
+and-assign	&=
+xor-assign	\^=
+or-assign	\|=
 right	>>
 left	<<
 inc	\+\+

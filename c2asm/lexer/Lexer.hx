@@ -36,7 +36,7 @@ class Lexer{
 			}
 
 			if(!matched){
-				trace('Error at ' + pos + ':' + string.substring(0, 10));
+				throw 'Lexical error at ' + pos + ':' + string.substring(0, 10);
 				return null;
 			}
 		}
