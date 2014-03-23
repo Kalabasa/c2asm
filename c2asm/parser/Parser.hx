@@ -2,6 +2,7 @@ package c2asm.parser;
 
 import c2asm.lexer.Token;
 import c2asm.parser.Node;
+import c2asm.parser.Terminal;
 
 class Parser{
 	public var grammar:ParseGrammar;
@@ -11,15 +12,18 @@ class Parser{
 	}
 
 	public function parse(tokens:List<Token>):Node{
-		var subtree:Node = null;
-		var p:Node = null;
-		for(t in tokens){
-			var node:Node = new Node(t);
-			if(subtree == null){
-				p = subtree = node;
-			}
-			p = p.sibling = node;
+		var top:Node = new Node(tokens.pop());
+		return top;
+	}
+
+	private function shift(top:Node, tokens:List<Token>):Void{
+		while(top.sibling != null){
+			top = top.sibling;
 		}
-		return subtree;
+		top.sibling = new Node(tokens.pop());
+	}
+
+	private function reduce(top:Node):Void{
+
 	}
 }

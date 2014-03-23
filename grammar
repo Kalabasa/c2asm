@@ -1,6 +1,8 @@
 # C language grammar specification
 # Source: http://www.lysator.liu.se/c/ANSI-C-grammar-y.html
 
+start translation_unit
+
 primary_exp
 	id
 	constant
@@ -243,8 +245,8 @@ id_list
 	id_list comma id
 
 type_name
-	specifier_qualifier_listl
-	specifier_qualifier_listl abstract_declarator
+	specifier_qualifier_list
+	specifier_qualifier_list abstract_declarator
 
 abstract_declarator
 	pointer
